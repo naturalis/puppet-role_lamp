@@ -11,7 +11,7 @@ class role_lamp (
   $docroot             = '/var/www/htdocs',
   $extra_users_hash    = undef,
   $webusers_hash       = undef,
-  $webdirs             = ['/var/www/htdocs']
+  $webdirs             = ['/var/www/htdocs'],
   $rwwebdirs           = undef,
   $mysql_root_password = 'rootpassword',
   $instances           = {'site.lampsite.nl' => {
@@ -38,23 +38,28 @@ class role_lamp (
 # create group webusers and set permissions for documents. 
   group { "webusers":
     ensure         => present
-  }->
-  file { $webdirs:
-    ensure         => 'directory',
-    mode           => '0460',
-    owner          => 'www-data',
-    group          => 'webusers',
-    recurse        => true,
-  }
-  file { $rwwebdirs:
-    ensure         => 'directory',
-    mode           => '0660',
-    owner          =>  'www-data',
-    group          => 'webusers',
-    recurse        => true,
-    require        => File[$webdirs],
   }
 
+  if $webdirs {
+    file { $webdirs:
+      ensure         => 'directory',
+      mode           => '0460',
+      owner          => 'www-data',
+      group          => 'webusers',
+      recurse        => true,
+      require        => Group['webusers'],
+    }
+  }
+  if $rwwebdirs {
+    file { $rwwebdirs:
+      ensure         => 'directory',
+      mode           => '0660',
+      owner          =>  'www-data',
+      group          => 'webusers',
+      recurse        => true,
+      require        => [Group['webusers'],File[$webdirs]],
+    }
+  }
 # install php module php-gd
   php::module { [ 'gd' ]: }
 
