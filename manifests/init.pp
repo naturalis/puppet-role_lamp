@@ -8,9 +8,11 @@
 #
 #
 class role_lamp (
-  $dbpassword          = 'password',
   $docroot             = '/var/www/htdocs',
   $extra_users_hash    = undef,
+  $webusers_hash       = undef,
+  $webdirs             = ['/var/www/htdocs']
+  $rwwebdirs           = undef,
   $mysql_root_password = 'rootpassword',
   $instances           = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
@@ -28,20 +30,45 @@ class role_lamp (
     create_resources('base::users', parseyaml($extra_users_hash))
   }
 
+# create webusers
+  if $webusers_hash {
+    create_resources('role_lamp::webusers', parseyaml($webusers_hash))
+  }
+
+# create group webusers and set permissions for documents. 
+  group { "webusers":
+    ensure         => present
+  }->
+  file { $webdirs:
+    ensure         => 'directory',
+    mode           => '0460',
+    owner          => 'www-data',
+    group          => 'webusers',
+    recurse        => true,
+  }
+  file { $rwwebdirs:
+    ensure         => 'directory',
+    mode           => '0660',
+    owner          =>  'www-data',
+    group          => 'webusers',
+    recurse        => true,
+    require        => File[$webdirs],
+  }
+
 # install php module php-gd
   php::module { [ 'gd' ]: }
 
 # Install apache and enable modules
   class { 'apache':
-    default_mods => true,
-    mpm_module => 'prefork',
+    default_mods     => true,
+    mpm_module       => 'prefork',
   }
   include apache::mod::php
   include apache::mod::rewrite
 
 # Create instances (vhosts)
   class { 'role_lamp::instances': 
-      instances => $instances,
+      instances      => $instances,
   }
 
 # Configure MySQL Security
@@ -49,5 +76,7 @@ class role_lamp (
   class { 'mysql::server':
       root_password  => $mysql_root_password,
   }
+
+
   
 }
