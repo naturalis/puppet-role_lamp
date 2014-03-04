@@ -26,6 +26,22 @@ define role_lamp::webusers(
     mode    => '0700',
   }
 
+  file { "/home/${username}/.vimrc":
+    ensure  => 'link',
+    target  => '/etc/vimrc',
+  }
+
+  file { "/home/${username}/.screenrc":
+    ensure  => 'link',
+    target  => '/etc/screenrc',
+  }
+
+  file { "/home/${username}/.zshrc":
+    ensure  => 'link',
+    target  => '/etc/zshrc',
+  }
+
+
   file { "/home/${username}/.ssh":
     ensure  => directory,
     owner   => $username,

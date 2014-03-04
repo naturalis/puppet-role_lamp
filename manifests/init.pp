@@ -12,7 +12,7 @@ class role_lamp (
   $extra_users_hash    = undef,
   $webusers_hash       = undef,
   $webdirs             = ['/var/www/htdocs'],
-  $rwwebdirs           = undef,
+  $rwwebdirs           = ['/var/www/htdocs/cache'],
   $mysql_root_password = 'rootpassword',
   $instances           = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
@@ -40,26 +40,23 @@ class role_lamp (
     ensure         => present
   }
 
-  if $webdirs {
-    file { $webdirs:
-      ensure         => 'directory',
-      mode           => '0460',
-      owner          => 'www-data',
-      group          => 'webusers',
-      recurse        => true,
-      require        => Group['webusers'],
-    }
+  file { $webdirs:
+    ensure         => 'directory',
+    mode           => '0460',
+    owner          => 'www-data',
+    group          => 'webusers',
+    recurse        => true,
+    require        => Group['webusers']
+  }->
+  file { $rwwebdirs:
+    ensure         => 'directory',
+    mode           => '0660',
+    owner          => 'www-data',
+    group          => 'webusers',
+    recurse        => true,
+    require        => [Group['webusers'],File[$webdirs]]
   }
-  if $rwwebdirs {
-    file { $rwwebdirs:
-      ensure         => 'directory',
-      mode           => '0660',
-      owner          =>  'www-data',
-      group          => 'webusers',
-      recurse        => true,
-      require        => [Group['webusers'],File[$webdirs]],
-    }
-  }
+
 # install php module php-gd
   php::module { [ 'gd' ]: }
 
