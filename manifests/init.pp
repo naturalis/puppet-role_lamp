@@ -1,6 +1,5 @@
 # == Class: role_lamp
 #
-# Full description of class role_lamp here.
 #
 # === Authors
 #
@@ -9,10 +8,9 @@
 #
 class role_lamp (
   $docroot             = '/var/www/htdocs',
-  $extra_users_hash    = undef,
-  $webusers_hash       = undef,
   $webdirs             = ['/var/www/htdocs'],
   $rwwebdirs           = ['/var/www/htdocs/cache'],
+  $enable_mysql        = undef,
   $mysql_root_password = 'rootpassword',
   $instances           = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
@@ -25,40 +23,24 @@ class role_lamp (
                          },
 ){
 
-# create extra users
-  if $extra_users_hash {
-    create_resources('base::users', parseyaml($extra_users_hash))
-  }
-
-# create webusers
-  if $webusers_hash {
-    create_resources('role_lamp::webusers', parseyaml($webusers_hash))
-  }
-
-# create group webusers and set permissions for documents. 
-  group { "webusers":
-    ensure         => present
-  }
-
-  file { $webdirs:
-    ensure         => 'directory',
-    mode           => '0460',
-    owner          => 'www-data',
-    group          => 'webusers',
-    recurse        => true,
-    require        => Group['webusers']
-  }->
-  file { $rwwebdirs:
-    ensure         => 'directory',
-    mode           => '0660',
-    owner          => 'www-data',
-    group          => 'webusers',
-    recurse        => true,
-    require        => [Group['webusers'],File[$webdirs]]
-  }
+    file { $webdirs:
+      ensure         => 'directory',
+      mode           => '0750',
+      owner          => 'root',
+      group          => 'www-data',
+      require        => Class['apache']
+    }->
+    file { $rwwebdirs:
+      ensure         => 'directory',
+      mode           => '0777',
+      owner          => 'www-data',
+      group          => 'www-data',
+      require        => File[$webdirs]
+    }
+  
 
 # install php module php-gd
-  php::module { [ 'gd' ]: }
+  php::module { [ 'gd','mysql','curl' ]: }
 
 # Install apache and enable modules
   class { 'apache':
@@ -67,6 +49,7 @@ class role_lamp (
   }
   include apache::mod::php
   include apache::mod::rewrite
+  include apache::mod::speling
 
 # Create instances (vhosts)
   class { 'role_lamp::instances': 
@@ -74,9 +57,11 @@ class role_lamp (
   }
 
 # Configure MySQL Security
-  class { 'mysql::server::account_security':}
-  class { 'mysql::server':
-      root_password  => $mysql_root_password,
+  if $enablemysql {
+    class { 'mysql::server::account_security':}
+    class { 'mysql::server':
+        root_password  => $mysql_root_password,
+    }
   }
 
 
