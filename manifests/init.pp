@@ -15,7 +15,7 @@ class role_lamp (
   $instances           = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
                            'docroot'         => '/var/www/htdocs',
-                           'directories'     => [{ 'path' => '/var/www/htdocs', 'options' => '-Indexes FollowSymLinks MultiViews', 'allow_override' => 'All' }],
+                           'directories'     => [{ 'path' => '/var/www/htdocs', 'options' => '-Indexes +FollowSymLinks +MultiViews', 'allow_override' => 'All' }],
                            'port'            => 80,
                            'serveradmin'     => 'webmaster@naturalis.nl',
                            'priority'        => 10,

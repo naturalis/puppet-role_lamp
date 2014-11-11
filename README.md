@@ -46,7 +46,7 @@ This module has been built on and tested against Puppet 3 and higher.
 
 The module has been tested on:
 - Ubuntu 12.04LTS
-
+- Ubuntu 14.04LTS
 
 Authors
 -------------
