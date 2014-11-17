@@ -11,7 +11,7 @@ Sensible defaults for Naturalis in init.pp, extra_users_hash for additional SSH 
   docroot              = documentroot
   webdirs              = Array with webdirectories, 0770 permissions will be applied owner: www-data  group: www-data
   rwwebdirs            = Array with webdirectories that need read and write permissions, starting at the highest path, 0777 permissions will be applied owner: www-data  group: www-data
-  enablemysql          = when set to true a mysql server will be installed
+  enable_mysql         = when set to true a mysql server will be installed
   mysql_root_password  = Mysql Root password
   instances            = Instance hash, see the default for parameters
 ```
