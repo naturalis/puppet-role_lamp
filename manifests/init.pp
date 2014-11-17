@@ -57,10 +57,12 @@ class role_lamp (
   }
 
 # Configure MySQL Security
-  if $enablemysql {
+  if $enable_mysql {
     class { 'mysql::server::account_security':}
     class { 'mysql::server':
-        root_password  => $mysql_root_password,
+        root_password   => $mysql_root_password,
+        service_enabled => true,
+        service_manage  => true,
     }
   }
 
