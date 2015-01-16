@@ -74,7 +74,6 @@ class role_lamp (
     }
     exec { "link-phpmyadmin":
       command => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
-      require => File['/usr/share/phpmyadmin/index.php'],
       path    => ["/bin"],
       notify  => Service["apache"]
     }
