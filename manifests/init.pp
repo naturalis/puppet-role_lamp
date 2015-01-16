@@ -11,6 +11,7 @@ class role_lamp (
   $webdirs             = ['/var/www/htdocs'],
   $rwwebdirs           = ['/var/www/htdocs/cache'],
   $enable_mysql        = undef,
+  $enable_phpmyadmin   = false,
   $mysql_root_password = 'rootpassword',
   $instances           = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
@@ -65,7 +66,12 @@ class role_lamp (
         service_manage  => true,
     }
   }
-
-
+# Configure phpMyadmin
+  if $enable_phpmyadmin {
+    package { 'phpmyadmin':
+      ensure => "installed",
+      require => Package['apache2']
+    }  
+  }
   
 }
