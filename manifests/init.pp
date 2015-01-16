@@ -71,7 +71,13 @@ class role_lamp (
     package { 'phpmyadmin':
       ensure => "installed",
       require => Package['apache2']
-    }  
+    }
+    exec { "link-phpmyadmin":
+      command => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
+      require => File['/usr/share/phpmyadmin/index.php'],
+      path    => ["/bin"],
+      notify  => Service["apache"]
+    }
   }
   
 }
