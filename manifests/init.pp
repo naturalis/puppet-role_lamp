@@ -71,7 +71,7 @@ class role_lamp (
     package { 'phpmyadmin':
       ensure            => "installed",
       require           => Package['apache2'],
-      notify           => Exec['link-phpmyadmin', 'enable-mcrypt'],
+      notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
     exec { "link-phpmyadmin":
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
@@ -79,11 +79,11 @@ class role_lamp (
       refreshonly       => true,
     }
     exec { 'enable-mcrypt':
-    command => 'php5enmod mcrypt',
-    path    => ['/bin', '/usr/bin', '/usr/sbin'],
-    require => Package['phpmyadmin'],
-    refreshonly       => true,
-    notify => Service['apache2'],
+    command             => 'php5enmod mcrypt',
+    path                => ['/bin', '/usr/bin', '/usr/sbin'],
+    require             => Package['phpmyadmin', 'apache2'],
+    refreshonly         => true,
+    notify              => Service['apache2'],
   }
   }
   
