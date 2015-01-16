@@ -70,8 +70,8 @@ class role_lamp (
   if $enable_phpmyadmin {
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => Package['apache2']
-      notify           => Exec['link-phpmyadmin']
+      require           => Package['apache2'],
+      notify           => Exec['link-phpmyadmin'],
     }
     exec { "link-phpmyadmin":
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
