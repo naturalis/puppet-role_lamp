@@ -69,12 +69,14 @@ class role_lamp (
 # Configure phpMyadmin
   if $enable_phpmyadmin {
     package { 'phpmyadmin':
-      ensure => "installed",
-      require => Package['apache2']
+      ensure            => "installed",
+      require           => Package['apache2']
+      notify           => Exec['link-phpmyadmin']
     }
     exec { "link-phpmyadmin":
-      command => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
-      path    => ["/bin"],
+      command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
+      path              => ["/bin"],
+      refreshonly       => true,
     }
   }
   
