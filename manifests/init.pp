@@ -81,8 +81,9 @@ class role_lamp (
     exec { 'enable-mcrypt':
     command => 'php5enmod mcrypt',
     path    => ['/bin', '/usr/bin', '/usr/sbin'],
-    require => Package['php5-mcrypt'],
-    notify => Service['apache2'];
+    require => Package['phpmyadmin'],
+    refreshonly       => true,
+    notify => Service['apache2'],
   }
   }
   
