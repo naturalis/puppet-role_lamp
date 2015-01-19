@@ -39,6 +39,7 @@ class role_lamp (
       require        => File[$webdirs]
     }
   
+
 # install php module php-gd
   php::module { [ 'gd','mysql','curl' ]: }
 
@@ -67,10 +68,9 @@ class role_lamp (
   }
 # Configure phpMyadmin
   if $enable_phpmyadmin {
-    
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => [ File[$webdirs], Package['apache2'], Service['mysql'] ],
+      require           => Package['apache2'],
       notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
     exec { "link-phpmyadmin":
@@ -81,6 +81,7 @@ class role_lamp (
     exec { 'enable-mcrypt':
     command             => 'php5enmod mcrypt',
     path                => ['/bin', '/usr/bin', '/usr/sbin'],
+    require             => Package['phpmyadmin', 'apache2'],
     refreshonly         => true,
     notify              => Service['apache2'],
   }
