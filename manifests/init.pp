@@ -72,7 +72,7 @@ class role_lamp (
     package { 'phpmyadmin':
       ensure            => "installed",
       require           => File[$webdirs],
-      notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
+      notify            => Exec['link-phpmyadmin', 'enable-mcrypt'], Package['apache2'],
     }
     exec { "link-phpmyadmin":
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
