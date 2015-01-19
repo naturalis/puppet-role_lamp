@@ -70,7 +70,7 @@ class role_lamp (
     
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => [ File[$webdirs], Package['apache2', 'mysql'] ]
+      require           => [ File[$webdirs], Package['apache2', 'mysql'] ],
       notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
     exec { "link-phpmyadmin":
