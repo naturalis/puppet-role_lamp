@@ -22,7 +22,8 @@ class role_lamp (
                            'priority'        => 10,
                           },
                          },
-){
+)
+{
 
     file { $webdirs:
       ensure         => 'directory',
@@ -31,6 +32,7 @@ class role_lamp (
       group          => 'www-data',
       require        => Class['apache']
     }->
+
     file { $rwwebdirs:
       ensure         => 'directory',
       mode           => '0777',
@@ -38,7 +40,6 @@ class role_lamp (
       group          => 'www-data',
       require        => File[$webdirs]
     }
-  
 
 # install php module php-gd
   php::module { [ 'gd','mysql','curl' ]: }
@@ -48,6 +49,7 @@ class role_lamp (
     default_mods     => true,
     mpm_module       => 'prefork',
   }
+
   include apache::mod::php
   include apache::mod::rewrite
   include apache::mod::speling
@@ -66,6 +68,7 @@ class role_lamp (
         service_manage  => true,
     }
   }
+
 # Configure phpMyadmin
   if $enable_phpmyadmin {
     package { 'phpmyadmin':
@@ -73,19 +76,20 @@ class role_lamp (
       require           => Package['apache2'],
       notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
-    exec { "link-phpmyadmin":
+
+    exec { 'link-phpmyadmin':
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
       path              => ["/bin"],
       require           => Package['phpmyadmin', 'apache2'],
       refreshonly       => true,
     }
+
     exec { 'enable-mcrypt':
-    command             => 'php5enmod mcrypt',
-    path                => ['/bin', '/usr/bin', '/usr/sbin'],
-    require             => Package['phpmyadmin', 'apache2'],
-    refreshonly         => true,
-    notify              => Service['apache2'],
+      command             => 'php5enmod mcrypt',
+      path                => ['/bin', '/usr/bin', '/usr/sbin'],
+      require             => Package['phpmyadmin', 'apache2'],
+      refreshonly         => true,
+      notify              => Service['apache2'],
+    }
   }
-  }
-  
 }
