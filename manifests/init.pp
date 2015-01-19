@@ -76,6 +76,7 @@ class role_lamp (
     exec { "link-phpmyadmin":
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
       path              => ["/bin"],
+      require           => Package['phpmyadmin', 'apache2'],
       refreshonly       => true,
     }
     exec { 'enable-mcrypt':
