@@ -10,7 +10,6 @@ class role_lamp (
   $docroot             = '/var/www/htdocs',
   $webdirs             = ['/var/www/htdocs'],
   $rwwebdirs           = ['/var/www/htdocs/cache'],
-  $phpmadirs           = ['/var/www/htdocs/phpmyadmin'],
   $enable_mysql        = undef,
   $enable_phpmyadmin   = false,
   $mysql_root_password = 'rootpassword',
@@ -73,17 +72,15 @@ class role_lamp (
 # Configure phpMyadmin
   if $enable_phpmyadmin {
   
-  file { $phpmadirs:
+  file { '/var/www/htdocs/phpmyadmin':
       ensure            => 'directory',
       mode              => '0777',
-      owner             => 'www-data',
-      group             => 'www-data',
-      require           => File[$webdirs]
+      require           => File[$webdirs],
     }
     
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => File[$phpmadirs]
+      require           => File['/var/www/htdocs/phpmyadmin']
       notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
 
