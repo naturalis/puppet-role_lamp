@@ -69,15 +69,9 @@ class role_lamp (
 # Configure phpMyadmin
   if $enable_phpmyadmin {
     
-    file { '/var/www/htdocs/phpmyadmin':
-      ensure            => 'directory',
-      mode              => '0777',
-      require           => File[$webdirs],
-    }
-    
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => File['/var/www/htdocs/phpmyadmin'],
+      require           => File[$webdirs],
       notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
     exec { "link-phpmyadmin":
