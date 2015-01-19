@@ -70,12 +70,13 @@ class role_lamp (
   if $enable_phpmyadmin {
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => [ Package['apache2'], File[$webdirs] ],
+      require           => Package['apache2'],
       notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
     exec { "link-phpmyadmin":
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
       path              => ["/bin"],
+      require           => File[$webdirs],
       refreshonly       => true,
     }
     exec { 'enable-mcrypt':
