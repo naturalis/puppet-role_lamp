@@ -39,7 +39,6 @@ class role_lamp (
       require        => File[$webdirs]
     }
   
-
 # install php module php-gd
   php::module { [ 'gd','mysql','curl' ]: }
 
@@ -71,8 +70,8 @@ class role_lamp (
     
     package { 'phpmyadmin':
       ensure            => "installed",
-      require           => File[$webdirs],
-      notify            => Exec['link-phpmyadmin', 'enable-mcrypt'], Package['apache2'],
+      require           => [ File[$webdirs], Package['apache2', 'mysql'] ]
+      notify            => Exec['link-phpmyadmin', 'enable-mcrypt'],
     }
     exec { "link-phpmyadmin":
       command           => "ln -sf /usr/share/phpmyadmin ${webdirs}/phpmyadmin",
