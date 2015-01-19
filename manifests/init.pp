@@ -14,70 +14,69 @@ class role_lamp (
   $enable_phpmyadmin   = false,
   $mysql_root_password = 'rootpassword',
   $instances           = {'site.lampsite.nl' => {
-                           'serveraliases'   => '*.lampsite.nl',
-                           'docroot'         => '/var/www/htdocs',
-                           'directories'     => [{ 'path' => '/var/www/htdocs', 'options' => '-Indexes +FollowSymLinks +MultiViews', 'allow_override' => 'All' }],
-                           'port'            => 80,
-                           'serveradmin'     => 'webmaster@naturalis.nl',
-                           'priority'        => 10,
-                          },
-                         },
-)
-{
-
-    file { $webdirs:
-      ensure         => 'directory',
-      mode           => '0750',
-      owner          => 'root',
-      group          => 'www-data',
-      require        => Class['apache']
-    }->
-
-    file { $rwwebdirs:
-      ensure         => 'directory',
-      mode           => '0777',
-      owner          => 'www-data',
-      group          => 'www-data',
-      require        => File[$webdirs]
-    }
-
-# install php module php-gd
-  php::module { [ 'gd','mysql','curl' ]: }
-
-# Install apache and enable modules
-  class { 'apache':
-    default_mods     => true,
-    mpm_module       => 'prefork',
-  }
-
-  include apache::mod::php
-  include apache::mod::rewrite
-  include apache::mod::speling
-
-# Create instances (vhosts)
-  class { 'role_lamp::instances': 
+    'serveraliases'   => '*.lampsite.nl',
+    'docroot'         => '/var/www/htdocs',
+    'directories'     => [{ 'path' => '/var/www/htdocs', 'options' => '-Indexes +FollowSymLinks +MultiViews', 'allow_override' => 'All' }],
+    'port'            => 80,
+    'serveradmin'     => 'webmaster@naturalis.nl',
+    'priority'        => 10,
+    },
+    },
+    )
+    {
+      
+      file { $webdirs:
+        ensure         => 'directory',
+        mode           => '0750',
+        owner          => 'root',
+        group          => 'www-data',
+        require        => Class['apache']
+        }->
+        
+        file { $rwwebdirs:
+          ensure         => 'directory',
+          mode           => '0777',
+          owner          => 'www-data',
+          group          => 'www-data',
+          require        => File[$webdirs]
+        }
+        
+        # install php module php-gd
+        php::module { [ 'gd','mysql','curl' ]: }
+        
+        # Install apache and enable modules
+        class { 'apache':
+        default_mods     => true,
+        mpm_module       => 'prefork',
+      }
+      
+      include apache::mod::php
+      include apache::mod::rewrite
+      include apache::mod::speling
+      
+      # Create instances (vhosts)
+      class { 'role_lamp::instances': 
       instances      => $instances,
-  }
-
-# Configure MySQL Security
-  if $enable_mysql {
-    class { 'mysql::server::account_security':}
-    class { 'mysql::server':
-        root_password   => $mysql_root_password,
-        service_enabled => true,
-        service_manage  => true,
+    }
+    
+    # Configure MySQL Security
+    if $enable_mysql {
+      class { 'mysql::server::account_security':}
+      class { 'mysql::server':
+      root_password   => $mysql_root_password,
+      service_enabled => true,
+      service_manage  => true,
     }
   }
-
-# Configure phpMyadmin
-  if $enable_phpmyadmin {
   
-  file { '/var/www/htdocs/phpmyadmin':
+  # Configure phpMyadmin
+  if $enable_phpmyadmin {
+    file { '/var/www/htdocs/phpmyadmin':
       ensure            => 'directory',
       mode              => '0777',
       require           => File[$webdirs],
     }
-    
+  
     package { 'phpmyadmin':
       ensure            => "installed",
       require           => File['/var/www/htdocs/phpmyadmin']
