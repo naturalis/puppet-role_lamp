@@ -7,13 +7,14 @@
 #
 #
 class role_lamp (
-  $docroot             = '/var/www/htdocs',
-  $webdirs             = ['/var/www/htdocs'],
-  $rwwebdirs           = ['/var/www/htdocs/cache'],
-  $enable_mysql        = undef,
-  $enable_phpmyadmin   = false,
-  $mysql_root_password = 'rootpassword',
-  $instances           = {'site.lampsite.nl' => {
+  $docroot                    = '/var/www/htdocs',
+  $webdirs                    = ['/var/www/htdocs'],
+  $rwwebdirs                  = ['/var/www/htdocs/cache'],
+  $enable_mysql               = undef,
+  $enable_phpmyadmin          = false,
+  $mysql_root_password        = 'rootpassword',
+  $mysql_manage_config_file   = 'true',
+  $instances                  = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
                            'docroot'         => '/var/www/htdocs',
                            'directories'     => [{ 'path' => '/var/www/htdocs', 'options' => '-Indexes +FollowSymLinks +MultiViews', 'allow_override' => 'All' }],
@@ -64,6 +65,7 @@ class role_lamp (
         root_password   => $mysql_root_password,
         service_enabled => true,
         service_manage  => true,
+        manage_config_file  => $mysql_manage_config_file,
     }
   }
 # Configure phpMyadmin
