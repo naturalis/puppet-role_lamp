@@ -94,20 +94,20 @@ class role_lamp (
             'key_buffer_size'                 => $mysql_key_buffer_size,
             'query_cache_limit'               => $mysql_query_cache_limit,
             'query_cache_size'                => $mysql_query_cache_size,
-            'innodb_buffer_pool_size'         => $mysql_innodb_buffer_pool_size
-            'innodb_additional_mem_pool_size' => $mysql_innodb_additional_mem_pool_size
-            'innodb_log_buffer_size'          => $mysql_innodb_log_buffer_size
-            'max_connections'                 => $mysql_max_connections
-            'tmp_table_size'                  => $mysql_tmp_table_size
-            'max_heap_table_size'             => $mysql_max_heap_table_size
-            'open-files-limit'                => $mysql_open-files-limit
-            'max_allowed_packet'              => $mysql_max_allowed_packet
-            'sort_buffer_size'                => $mysql_sort_buffer_size
-            'read_buffer_size'                => $mysql_read_buffer_size
-            'read_rnd_buffer_size'            => $mysql_read_rnd_buffer_size
-            'join_buffer_size'                => $mysql_join_buffer_size
-            'thread_stack'                    => $mysql_thread_stack
-            'thread_cache_size'               => $mysql_thread_cache_size
+            'innodb_buffer_pool_size'         => $mysql_innodb_buffer_pool_size,
+            'innodb_additional_mem_pool_size' => $mysql_innodb_additional_mem_pool_size,
+            'innodb_log_buffer_size'          => $mysql_innodb_log_buffer_size,
+            'max_connections'                 => $mysql_max_connections,
+            'tmp_table_size'                  => $mysql_tmp_table_size,
+            'max_heap_table_size'             => $mysql_max_heap_table_size,
+            'open-files-limit'                => $mysql_open-files-limit,
+            'max_allowed_packet'              => $mysql_max_allowed_packet,
+            'sort_buffer_size'                => $mysql_sort_buffer_size,
+            'read_buffer_size'                => $mysql_read_buffer_size,
+            'read_rnd_buffer_size'            => $mysql_read_rnd_buffer_size,
+            'join_buffer_size'                => $mysql_join_buffer_size,
+            'thread_stack'                    => $mysql_thread_stack,
+            'thread_cache_size'               => $mysql_thread_cache_size,
           }
         }
     }
