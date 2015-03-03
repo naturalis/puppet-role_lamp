@@ -14,6 +14,7 @@ class role_lamp (
   $enable_phpmyadmin          = false,
   $mysql_root_password        = 'rootpassword',
   $mysql_manage_config_file   = 'true',
+  $mysql_override_options           = undef,
   $instances                  = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
                            'docroot'         => '/var/www/htdocs',
@@ -72,6 +73,7 @@ class role_lamp (
         service_enabled => true,
         service_manage  => true,
         manage_config_file  => $mysql_manage_config_file,
+        override_options    => $mysql_override_options,
     }
   }
 # Configure phpMyadmin
