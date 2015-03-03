@@ -73,7 +73,7 @@ class role_lamp (
         service_enabled => true,
         service_manage  => true,
         manage_config_file  => $mysql_manage_config_file,
-        override_options = {
+        override_options => {
           'mysqld' => {
             'key_buffer_size' => $mysql_key_buffer_size,
           }
