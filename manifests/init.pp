@@ -17,6 +17,10 @@ class role_lamp (
   $mysql_key_buffer_size        = undef,
   $mysql_query_cache_limit      = undef,
   $mysql_query_cache_size       = undef,
+  $mysql_innodb_buffer_pool_size = undef,
+  $mysql_innodb_additional_mem_pool_size = undef,
+  $mysql_innodb_log_buffer_size = undef,
+  $mysql_max_connections        = undef,
   $instances                    = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
                            'docroot'         => '/var/www/htdocs',
@@ -80,6 +84,10 @@ class role_lamp (
             'key_buffer_size'                 => $mysql_key_buffer_size,
             'query_cache_limit'               => $mysql_query_cache_limit,
             'query_cache_size'                => $mysql_query_cache_size,
+            'innodb_buffer_pool_size'         => $mysql_innodb_buffer_pool_size,
+            'innodb_additional_mem_pool_size' => $mysql_innodb_additional_mem_pool_size,
+            'innodb_log_buffer_size'          => $mysql_innodb_log_buffer_size,
+            'max_connections'                 => $mysql_max_connections,
           }
         }
     }
