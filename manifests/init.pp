@@ -21,6 +21,8 @@ class role_lamp (
   $mysql_innodb_additional_mem_pool_size = undef,
   $mysql_innodb_log_buffer_size = undef,
   $mysql_max_connections        = undef,
+  $mysql_max_heap_table_size    = undef,
+  $mysql_open-files-limit       = undef,
   $instances                    = {'site.lampsite.nl' => {
                            'serveraliases'   => '*.lampsite.nl',
                            'docroot'         => '/var/www/htdocs',
@@ -88,6 +90,8 @@ class role_lamp (
             'innodb_additional_mem_pool_size' => $mysql_innodb_additional_mem_pool_size,
             'innodb_log_buffer_size'          => $mysql_innodb_log_buffer_size,
             'max_connections'                 => $mysql_max_connections,
+            'max_heap_table_size'             => $mysql_max_heap_table_size,
+            'open-files-limit'                => $mysql_open-files-limit,
           }
         }
     }
