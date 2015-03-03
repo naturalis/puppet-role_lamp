@@ -23,6 +23,9 @@ class role_lamp (
                            'priority'        => 10,
                           },
                          },
+  $keepalive                  = 'Off',
+  $max_keepalive_requests     = '100', 
+  $keepalive_timeout          = '15',
 ){
 
     file { $webdirs:
@@ -40,7 +43,6 @@ class role_lamp (
       require        => File[$webdirs]
     }
   
-
 # install php module php-gd
   php::module { [ 'gd','mysql','curl' ]: }
 
@@ -48,7 +50,11 @@ class role_lamp (
   class { 'apache':
     default_mods     => true,
     mpm_module       => 'prefork',
+    keepalive              => $keepalive,
+    max_keepalive_requests => $max_keepalive_requests,
+    keepalive_timeout      => $keepalive_timeout,
   }
+  
   include apache::mod::php
   include apache::mod::rewrite
   include apache::mod::speling
