@@ -26,7 +26,8 @@ Classes
 Dependencies
 -------------
 - puppetlabs/mysql
-- puppetlabs/apache2
+- puppetlabs/apache
+- puppetlabs/concat
 - thias/php
 
 
@@ -43,10 +44,16 @@ Limitations
 -------------
 This module has been built on and tested against Puppet 3 and higher.
 
-
 The module has been tested on:
 - Ubuntu 12.04LTS
 - Ubuntu 14.04LTS
+
+Dependencies releases tested: 
+- puppetlabs/mysql 3.3.0
+- puppetlabs/apache 1.3.0
+- puppetlabs/concat 1.2.0
+- thias/php 1.0.0
+
 
 Authors
 -------------
