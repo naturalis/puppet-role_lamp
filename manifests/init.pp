@@ -22,6 +22,8 @@ class role_lamp (
   $mysql_innodb_log_buffer_size           = undef,
   $mysql_max_connections                  = undef,
   $mysql_max_heap_table_size              = undef,
+  $mysql_lower_case_table_names           = undef,
+  $mysql_innodb_file_per_table            = undef,
   $instances                              =
           {'site.lampsite.nl' => {
             'serveraliases'   => '*.lampsite.nl',
@@ -91,6 +93,8 @@ class role_lamp (
             'innodb_log_buffer_size'          => $mysql_innodb_log_buffer_size,
             'max_connections'                 => $mysql_max_connections,
             'max_heap_table_size'             => $mysql_max_heap_table_size,
+            'lower_case_table_names'          => $mysql_lower_case_table_names,
+            'innodb_file_per_table'           => $mysql_innodb_file_per_table,
           }
         }
     }
