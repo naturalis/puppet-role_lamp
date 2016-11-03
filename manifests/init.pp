@@ -9,7 +9,9 @@
 class role_lamp (
   $docroot                                = '/var/www/htdocs',
   $webdirs                                = ['/var/www/htdocs'],
-  $rwwebdirs                              = ['/var/www/htdocs/cache'],
+  $webdirowner                            = 'root',
+  $webdirgroup                            = 'www-data',
+  $webdirmode                             = '0750',
   $enable_mysql                           = undef,
   $enable_phpmyadmin                      = false,
   $mysql_root_password                    = 'rootpassword',
@@ -41,20 +43,13 @@ class role_lamp (
   $keepalive_timeout                    = '15',
 ){
 
-    file { $webdirs:
-      ensure                  => 'directory',
-      mode                    => '0750',
-      owner                   => 'root',
-      group                   => 'www-data',
-      require                 => Class['apache']
-    }->
-    file { $rwwebdirs:
-      ensure                  => 'directory',
-      mode                    => '0777',
-      owner                   => 'www-data',
-      group                   => 'www-data',
-      require                 => File[$webdirs]
-    }
+  file { $webdirs:
+    ensure                  => 'directory',
+    mode                    => $webdirmode,
+    owner                   => $webdirowner,
+    group                   => $webdirgroup,
+    require                 => Class['apache']
+  }
 
 # install php module php-gd
   php::module { [ 'gd','mysql','curl' ]: }
