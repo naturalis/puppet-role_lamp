@@ -91,11 +91,11 @@ class role_lamp (
     composer            => false,
     manage_repos        => true,
     extensions => {
-      gd         => {.
+      gd         => {
         provider => 'apt',
         source   => 'php7-gd',
       },
-      curl       => {.
+      curl       => {
         provider => 'apt',
         source   => 'php-curl',
       },
