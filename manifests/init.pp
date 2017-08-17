@@ -22,18 +22,17 @@ class role_lamp (
   $letsencrypt_server                     = 'https://acme-v01.api.letsencrypt.org/directory',
   $mysql_root_password                    = 'rootpassword',
   $mysql_manage_config_file               = true,
-  $mysql_key_buffer_size                  = undef,
-  $mysql_query_cache_limit                = undef,
-  $mysql_query_cache_size                 = undef,
-  $mysql_innodb_buffer_pool_size          = undef,
-  $mysql_innodb_additional_mem_pool_size  = undef,
-  $mysql_innodb_log_buffer_size           = undef,
-  $mysql_max_connections                  = undef,
-  $mysql_max_heap_table_size              = undef,
-  $mysql_lower_case_table_names           = undef,
-  $mysql_innodb_file_per_table            = undef,
-  $mysql_tmp_table_size                   = undef,
-  $mysql_table_open_cache                 = undef,
+  $mysql_key_buffer_size                  = '16M',
+  $mysql_query_cache_limit                = '1M',
+  $mysql_query_cache_size                 = '16M',
+  $mysql_innodb_buffer_pool_size          = '32M',
+  $mysql_innodb_log_buffer_size           = '16M',
+  $mysql_max_connections                  = '100',
+  $mysql_max_heap_table_size              = '32M',
+  $mysql_lower_case_table_names           = '0',
+  $mysql_innodb_file_per_table            = '1',
+  $mysql_tmp_table_size                   = '32M',
+  $mysql_table_open_cache                 = '100',
   $php_memory_limit                       = '128M',
   $php_post_max_size                      = '2M',
   $php_upload_max_filesize                = '8M',
@@ -99,6 +98,8 @@ class role_lamp (
         provider => 'apt',
         source   => 'php-curl',
       },
+      mysql     => {
+      },
       mcrypt     => {
         provider => 'apt',
         source   => 'php-mcrypt',
@@ -138,7 +139,6 @@ class role_lamp (
 
 # Create instances (vhosts)
   class { 'role_lamp::instances':
-      instances               => $role_lamp::instances,
   }
 
 # Configure MySQL Security and finetuning if needed
@@ -155,7 +155,6 @@ class role_lamp (
             'query_cache_limit'               => $role_lamp::mysql_query_cache_limit,
             'query_cache_size'                => $role_lamp::mysql_query_cache_size,
             'innodb_buffer_pool_size'         => $role_lamp::mysql_innodb_buffer_pool_size,
-            'innodb_additional_mem_pool_size' => $role_lamp::mysql_innodb_additional_mem_pool_size,
             'innodb_log_buffer_size'          => $role_lamp::mysql_innodb_log_buffer_size,
             'max_connections'                 => $role_lamp::mysql_max_connections,
             'max_heap_table_size'             => $role_lamp::mysql_max_heap_table_size,
@@ -171,22 +170,15 @@ class role_lamp (
   if $role_lamp::enable_phpmyadmin {
     package { 'phpmyadmin':
       ensure                  => 'installed',
-      require                 => Package['apache2'],
-      notify                  => Exec['link-phpmyadmin', 'enable-mcrypt'],
+      require                 => Class['apache'],
+      notify                  => Exec['link-phpmyadmin'],
     }
     exec { 'link-phpmyadmin':
-      command                 => "ln -sf /usr/share/phpmyadmin${role_lamp::webdirs}/phpmyadmin",
+      command                 => "ln -sf /usr/share/phpmyadmin ${role_lamp::docroot}/phpmyadmin",
       path                    => ['/bin'],
       require                 => File[$role_lamp::webdirs],
       refreshonly             => true,
     }
-    exec { 'enable-mcrypt':
-    command                   => 'php5enmod mcrypt',
-    path                      => ['/bin', '/usr/bin', '/usr/sbin'],
-    require                   => Package['phpmyadmin', 'apache2'],
-    refreshonly               => true,
-    notify                    => Service['apache2'],
-  }
   }
 
 }
