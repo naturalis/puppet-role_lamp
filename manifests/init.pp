@@ -128,7 +128,15 @@ class role_lamp (
     max_keepalive_requests    => $role_lamp::max_keepalive_requests,
     keepalive_timeout         => $role_lamp::keepalive_timeout,
   }
+  class { 'apache::mod::ldap':
+    ldap_shared_cache_size        => '500000',
+    ldap_cache_entries            => '1024',
+    ldap_cache_ttl                => '600',
+    ldap_opcache_entries          => '1024',
+    ldap_opcache_ttl              => '600',
+  }
 
+  class { 'apache::mod::authnz_ldap': }
   include apache::mod::php
   include apache::mod::rewrite
   include apache::mod::speling

@@ -20,6 +20,7 @@ class role_lamp::ssl (
 # install letsencrypt certs only and crontab
   if ($role_lamp::enableletsencrypt == true) {
     class { ::letsencrypt:
+      install_method => 'vcs',
       config => {
         email  => $role_lamp::letsencrypt_email,
         server => $role_lamp::letsencrypt_server,
@@ -28,6 +29,8 @@ class role_lamp::ssl (
     letsencrypt::certonly { 'letsencrypt_cert':
       domains       => $role_lamp::letsencrypt_domains,
       manage_cron   => true,
+      cron_before_command => 'service apache2 stop',
+      cron_success_command => 'service apache2 start',
     }
   }
 }
